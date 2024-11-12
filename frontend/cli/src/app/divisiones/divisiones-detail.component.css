@@ -1,0 +1,26 @@
+
+option[default] {
+    display: none;
+  }
+
+input[name="dni"] {
+    width: 200px;
+}
+input[name="nombre"], input[name="apellido"], input[name="titulo"], input[name="domicilio"] {
+    width: 600px;
+}
+input[name="telefono"], input[name="cuil"] {
+    width: 300px;
+}
+
+select[name="sexo"] {
+    width: 120px;
+}
+
+.btn-danger {
+    background-color: #e2504c;
+}
+
+.btn-success {
+    background-color: #49ae2a;
+}

@@ -1,0 +1,98 @@
+<div *ngIf="persona">
+    <ng-container *ngIf="!persona.id; else elseBlock">
+        <h2 class="subtitulo">Nueva persona</h2>
+    </ng-container>
+    <ng-template #elseBlock>
+        <h2 class="subtitulo">Editar persona</h2>
+    </ng-template>
+    <h2>{{ persona.nombre }} {{ persona.apellido }}</h2>
+
+    <form [formGroup]="editPersonaForm">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <label for="dni">DNI:</label>
+                    <input type="number" min="1" name="dni" placeholder="DNI" class="form-control"
+                        [(ngModel)]="persona.dni"
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['dniControl']['errors'] && submitted}"
+                        formControlName="dniControl" id="dni" />
+                </div>
+                <div class="col">
+                    <label for="cuil">Cuil:</label>
+                    <input type="number" min="1"
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['cuilControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.cuil" name="cuil" placeholder="Cuil" class="form-control"
+                        formControlName="cuilControl" maxlength=30 id="cuil" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label for="nombreInput">Nombre:</label>
+                    <input
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['nombreControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.nombre" name="nombre" placeholder="Nombre" class="form-control"
+                        formControlName="nombreControl" maxlength=90 id="nombre" />
+                </div>
+                <div class="col">
+                    <label for="apellido">Apellido:</label>
+                    <input
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['apellidoControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.apellido" name="apellido" placeholder="Apellido" class="form-control"
+                        formControlName="apellidoControl" maxlength=90 id="apellido" />
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    <label for="titulo">Título:</label>
+                    <input
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['tituloControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.titulo" name="titulo" placeholder="Titulo" class="form-control"
+                        formControlName="tituloControl" maxlength=90 id="titulo" />
+                </div>
+                <div class="col">
+                    <label for="sexo">Sexo:</label>
+                    <select [(ngModel)]="persona.sexo" class="form-control" id="sexo" name="sexo"
+                        formControlName="sexoControl"
+                        [ngClass]="{'is-invalid': !!editPersonaForm['controls']['sexoControl']['errors'] && submitted}"
+                        required>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                        <option value="O">Otro</option>
+
+                        <div class="invalid-feedback">
+                            Please select a valid state.
+                        </div>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label for="domicilio">Domicilio:</label>
+                    <input
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['domicilioControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.domicilio" name="domicilio" placeholder="Domicilio" class="form-control"
+                        formControlName="domicilioControl" maxlength=90 id="domicilio" />
+                </div>
+                <div class="col">
+                    <label for="telefono">Teléfono:</label>
+                    <input
+                        [ngClass]="{'is-invalid': editPersonaForm['controls']['telefonoControl']['errors'] && submitted}"
+                        [(ngModel)]="persona.telefono" name="telefono" placeholder="Teléfono" class="form-control"
+                        formControlName="telefonoControl" maxlength=30 id="telefono" />
+                </div>
+            </div>
+            <br>
+
+            <div *ngIf="error" class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+            </div>
+            <button (click)="goBack()" class="btn btn-danger">Atrás</button>
+            &nbsp;
+            <button (click)="save()" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</div>

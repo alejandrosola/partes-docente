@@ -1,0 +1,84 @@
+<div class="table-responsive">
+    <h2>Personas&nbsp;<a routerLink="/personas/id/new" class="btn btn-success float-right">Nueva persona</a></h2>
+    <div *ngIf="error">
+        <ngb-alert type="danger" (closed)="closeAlert()">
+            <strong>{{ errorMessage }}</strong>
+        </ngb-alert>
+    </div>
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>DNI</th>
+                <th>Cuil</th>
+                <th>Nombre y Apellido</th>
+                <th>Título</th>
+                <th>Sexo</th>
+                <th>Domicilio</th>
+                <th>Teléfono</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="personas.length == 0">
+                <td colspan="8">No hay personas registradas.</td>
+            </tr>
+            <tr *ngFor="let persona of personas; index as i">
+                <td>{{ i + resultsPage.size * resultsPage.number + 1 }}</td>
+                <td>{{ persona.dni }}</td>
+                <td>{{ persona.cuil }}</td>
+                <td>{{ persona.nombre }} {{persona.apellido}}</td>
+                <td>{{ persona.titulo }}</td>
+                <td>{{ persona.sexo }}</td>
+                <td>{{ persona.domicilio }}</td>
+                <td>{{ persona.telefono }}</td>
+                <td>
+                    <a routerLink="/personas/id/{{ persona.id }}"><i class="fa fa-pencil" placement="top" ngbTooltip="Editar"></i></a>
+                </td>
+                <td>
+                    <button (click)="openDialog(persona)" class="btn btn-danger" placement="top" ngbTooltip="Eliminar">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <ng-container *ngIf="pages.length > 1">
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-2)">&laquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-1)">&lsaquo;</a>
+                                </li>
+                                <li *ngFor="let t of pages;" class="page-item">
+                                    <a class="page-link" (click)="showPage(t)"
+                                        [ngClass]="{'active': t === currentPage}"> {{t+1}} </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-3)">&rsaquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-4)">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+            </tfoot>
+        </ng-container>
+        <div id="cantByPageForm">
+            <label for="resPage">Resultados por página: &nbsp;</label>
+            <form [formGroup]="cantByPageForm">
+                <input [(ngModel)]="cantByPage" type="number" id="resPage" value="5" class="form-control" min="1"
+                    max="20" [ngClass]="{'is-invalid': cantByPageForm['controls']['cantByPageControl']['errors']}"
+                    formControlName="cantByPageControl" style="width: 40%; margin: auto;">
+                <button (click)="getPersonas()" class="btn" style="width: 40%">Aceptar</button>
+            </form>
+        </div>
+    </table>
+</div>

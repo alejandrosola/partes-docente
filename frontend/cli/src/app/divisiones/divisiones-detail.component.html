@@ -1,0 +1,45 @@
+<div *ngIf="division">
+    <ng-container *ngIf="!division.id; else elseBlock">
+        <h2 class="subtitulo">Nueva división</h2>
+    </ng-container>
+    <ng-template #elseBlock>
+        <h2 class="subtitulo">Editar división</h2>
+    </ng-template>
+    <h2 *ngIf="division.anio && division.numero">{{ division.anio }}° {{ division.numero }}°</h2>
+    <form [formGroup]="editDivisionForm">
+        <div class="form-group">
+            <label for="anio">Año:</label>
+            <input type="number" min="1" name="anio" placeholder="Año" class="form-control" [(ngModel)]="division.anio"
+                [ngClass]="{'is-invalid': editDivisionForm['controls']['anioControl']['errors'] && submitted}"
+                formControlName="anioControl" id="anio"/>
+            <label for="numero">Número:</label>
+            <input type="number" min="1" [ngClass]="{'is-invalid': editDivisionForm['controls']['numeroControl']['errors'] && submitted}"
+                [(ngModel)]="division.numero" name="numero" placeholder="Número" class="form-control"
+                formControlName="numeroControl" id="numero"/>
+        </div>
+
+        <div class="form-group">
+            <label for="orientacion">Orientación:</label>
+            <input [ngClass]="{'is-invalid': editDivisionForm['controls']['orientacionControl']['errors'] && submitted}"
+                [(ngModel)]="division.orientacion" name="orientacion" placeholder="Orientación" class="form-control"
+                formControlName="orientacionControl" id="orientacion"/>
+            <label for="turno">Turno:</label>
+            <select [(ngModel)]="division.turno" class="form-control" id="turno" name="turno" formControlName="turnoControl" 
+            [ngClass]="{'is-invalid': !!editDivisionForm['controls']['turnoControl']['errors'] && submitted}"
+            required>
+                <option>Mañana</option>
+                <option>Tarde</option>
+                <option>Vespertino</option>
+                <option>Noche</option>
+            </select>
+        </div>
+        <br>
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+        </div>
+        <br>
+        <button (click)="goBack()" class="btn btn-danger">Atrás</button>
+        &nbsp;
+        <button (click)="save()" class="btn btn-success">Guardar</button>
+    </form>
+</div>

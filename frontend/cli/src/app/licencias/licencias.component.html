@@ -1,0 +1,76 @@
+<div class="table-responsive">
+    <h2>Licencias&nbsp;<a routerLink="/licencias/id/new" class="btn btn-success float-right">Nueva Licencia</a>
+        &nbsp;<a routerLink="/licencias/partediario" class="btn btn-info float-right">Parte Diario</a></h2>
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Pedido desde</th>
+                <th>Pedido hasta</th>
+                <th>Certificado Médico</th>
+                <th>Artículo</th>
+                <th>Persona</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="licencias.length == 0">
+                <td colspan="7">No hay licencias registradas.</td>
+            </tr>
+            <tr *ngFor="let licencia of licencias; index as i">
+                <td>{{ i + resultsPage.size * resultsPage.number + 1 }}</td>
+                <td>{{ licencia.pedidoDesde }}</td>
+                <td>{{ licencia.pedidoHasta }}</td>
+                <ng-container *ngIf="licencia.certificadoMedico == false; else elseBlock">
+                    <td>No</td>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <td>Si</td>
+                </ng-template>
+                <td>{{ licencia.articulo.nombre }}</td>
+                <td>{{ licencia.persona.nombre }} {{licencia.persona.apellido}} ({{licencia.persona.cuil}})</td>
+                <td>
+                <button (click)="openDialog(licencia)" class="btn btn-danger" placement="top" ngbTooltip="Eliminar"> 
+                    <i class="fa fa-trash"></i>
+                </button>
+                </td>
+            </tr>
+        </tbody>
+        <ng-container *ngIf="pages.length > 1">
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-2)">&laquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-1)">&lsaquo;</a>
+                                </li>
+                                <li *ngFor="let t of pages;" class="page-item">
+                                    <a class="page-link" (click)="showPage(t)"
+                                        [ngClass]="{'active': t === currentPage}"> {{t+1}} </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-3)">&rsaquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-4)">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+            </tfoot>
+        </ng-container>
+        <div id="cantByPageForm">
+            <label for="resPage">Resultados por página: &nbsp;</label>
+            <form [formGroup]="cantByPageForm">
+                <input [(ngModel)]="cantByPage" type="number" id="resPage" value="5" class="form-control" min="1"
+                    max="20" [ngClass]="{'is-invalid': cantByPageForm['controls']['cantByPageControl']['errors']}"
+                    formControlName="cantByPageControl" style="width: 40%; margin: auto;">
+                <button (click)="getLicencias()" class="btn" style="width: 40%">Aceptar</button>
+            </form>
+        </div>
+    </table>
+</div>

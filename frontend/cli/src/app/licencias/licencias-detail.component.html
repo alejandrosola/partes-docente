@@ -1,0 +1,98 @@
+<div *ngIf="licencia">
+    <h2>Nueva licencia</h2>
+    <form [formGroup]="editLicenciaForm">
+        <div class="row">
+            <div class="col">
+                <label for="pedidoDesde">Pedido desde:</label>
+                <input type="date" name="pedidoDesde" placeholder="Pedido desde" class="form-control" id="pedidoDesde"
+                    [ngClass]="{'is-invalid': editLicenciaForm['controls']['pedidoDesdeControl']['errors'] && submitted}"
+                    [(ngModel)]="licencia.pedidoDesde" formControlName="pedidoDesdeControl" />
+            </div>
+            <div class="col">
+                <label for="pedidoHasta">Pedido hasta:</label>
+                <input type="date" name="pedidoHasta" placeholder="Pedido desde" class="form-control" id="pedidoHasta"
+                    [ngClass]="{'is-invalid': editLicenciaForm['controls']['pedidoHastaControl']['errors'] && submitted}"
+                    [(ngModel)]="licencia.pedidoHasta" formControlName="pedidoHastaControl" />
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="persona">Persona:</label>
+                <input type="text"
+                name="persona" id="persona"
+                class="form-control"
+                [ngClass]="{'is-invalid': editLicenciaForm['controls']['personaControl']['errors'] && submitted}"
+                [(ngModel)]="licencia.persona" formControlName="personaControl"
+                placeholder="Persona" required
+                [ngbTypeahead]="searchPersona"
+                [editable]="false"
+                [resultFormatter]="resultPersonaFormat"
+                [inputFormatter]="inputPersonaFormat"
+                />
+            </div>
+            <div class="col" *ngIf="licencia.persona">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="nombrePersona">Nombre</label>
+                        <h5 id="nombrePersona">{{licencia.persona.nombre}}</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="apellido">Apellido</label>
+                        <h5 id="apellido">{{licencia.persona.apellido}}</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="cuil">CUIL</label>
+                        <h5 id="cuil">{{licencia.persona.cuil}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="articulo">Artículo:</label>
+                    <input type="text"
+                    name="articulo" id="articulo"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': editLicenciaForm['controls']['articuloControl']['errors'] && submitted}"
+                    [(ngModel)]="licencia.articulo" formControlName="articuloControl"
+                    placeholder="Artículo" required
+                    [ngbTypeahead]="searchArticulo"
+                    [editable]="false"
+                    [resultFormatter]="resultArticuloFormat"
+                    [inputFormatter]="inputArticuloFormat"
+                    />
+            </div>
+            <div class="col" *ngIf="licencia.articulo">
+                <div class="row">
+                    <div class="col">
+                        <label for="nombreArticulo">Nombre</label>
+                        <h5 id="nombreArticulo">{{licencia.articulo.nombre}}</h5>
+                    </div>
+                    <div class="col-10">
+                        <label for="descripcion">Descripción</label>
+                        <h5 id="descripcion">{{licencia.articulo.descripcion}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="col">
+                <label for="certificadoMedico">Certificado médico:&nbsp;</label>
+                <input id="certificadoMedico" type="checkbox" [(ngModel)]="licencia.certificadoMedico" formControlName="certificadoControl">
+            </div>
+        </div>
+
+        <br>
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+        </div>
+        <br>
+        <button (click)="goBack()" class="btn btn-danger">Atrás</button>
+        &nbsp;
+        <button (click)="save()" class="btn btn-success">Guardar</button>
+    </form>
+</div>

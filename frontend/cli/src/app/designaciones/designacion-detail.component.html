@@ -1,0 +1,107 @@
+<div *ngIf="designacion">
+    <ng-container *ngIf="!designacion.id; else elseBlock">
+        <h2 class="subtitulo">Nueva designación</h2>
+    </ng-container>
+    <ng-template #elseBlock>
+        <h2 class="subtitulo">Editar designación</h2>
+    </ng-template>
+    <form [formGroup]="editDesignacionForm">
+        <div class="row">
+            <div class="col">
+                <label for="situacionRevista">Situación:</label>
+                <input name="situacionRevista" placeholder="Situación" class="form-control" id="situacionRevista"
+                    [ngClass]="{'is-invalid': editDesignacionForm['controls']['situacionRevistaControl']['errors'] && submitted}"
+                    [(ngModel)]="designacion.situacionRevista" formControlName="situacionRevistaControl" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="cargo">Cargo:</label>
+                <select class="form-control" id="cargo" name="cargo"
+                    [ngClass]="{'is-invalid': editDesignacionForm['controls']['cargoControl']['errors'] && submitted}"
+                    [(ngModel)]="designacion.cargo" formControlName="cargoControl">
+                    <option disabled value="">Cargos</option>
+                    <option *ngFor="let cargo of cargos" [ngValue]="cargo">
+                        <ng-container *ngIf="cargo.tipoDesignacion === 'CARGO'">
+                            {{cargo.nombre}}
+                        </ng-container>
+                        <ng-container *ngIf="cargo.tipoDesignacion === 'ESPACIOCURRICULAR'">
+                            {{cargo.nombre}} {{cargo.division.anio}}° {{cargo.division.numero}}°
+                        </ng-container>
+                    </option>
+                </select>
+            </div>
+            <div class="col" *ngIf="designacion.cargo">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="nombre">Nombre</label>
+                        <h5 id="nombre">{{designacion.cargo.nombre}}</h5>
+                    </div>
+                    <div class="col-md-3" *ngIf="designacion.cargo.tipoDesignacion == 'ESPACIOCURRICULAR'">
+                        <label for="anio">Año</label>
+                        <h5 id="anio">{{designacion.cargo.division.anio}}</h5>
+                    </div>
+                    <div class="col-md-3" *ngIf="designacion.cargo.tipoDesignacion == 'ESPACIOCURRICULAR'">
+                        <label for="numero">Número</label>
+                        <h5 id="numero">{{designacion.cargo.division.numero}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="persona">Persona:</label>
+                <input type="text"
+                name="persona" id="persona"
+                class="form-control"
+                [ngClass]="{'is-invalid': editDesignacionForm['controls']['personaControl']['errors'] && submitted}"
+                [(ngModel)]="designacion.persona" formControlName="personaControl"
+                placeholder="Persona" required
+                [ngbTypeahead]="searchPersona"
+                [editable]="false"
+                [resultFormatter]="resultPersonaFormat"
+                [inputFormatter]="inputPersonaFormat"
+                />
+            </div>
+            <div class="col" *ngIf="designacion.persona">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="nombrePersona">Nombre</label>
+                        <h5 id="nombrePersona">{{designacion.persona.nombre}}</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="apellido">Apellido</label>
+                        <h5 id="apellido">{{designacion.persona.apellido}}</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="cuil">CUIL</label>
+                        <h5 id="cuil">{{designacion.persona.cuil}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="fechaInicio">Fecha de Inicio:</label>
+                <input type="date" name="fechaInicio" placeholder="Fecha de Inicio" class="form-control"
+                    id="fechaInicio" [(ngModel)]="designacion.fechaInicio" formControlName="fechaInicioControl" />
+            </div>
+            <div class="col">
+                <label for="fechaFin">Fecha de Fin:</label>
+                <input type="date" name="fechaFin" placeholder="Fecha de Fin" class="form-control" id="fechaFin"
+                    [(ngModel)]="designacion.fechaFin" formControlName="fechaFinControl" />
+            </div>
+        </div>
+
+        <br>
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+        </div>
+        <br>
+        <button (click)="goBack()" class="btn btn-danger">Atrás</button>
+        &nbsp;
+        <button (click)="save()" class="btn btn-success">Guardar</button>
+    </form>
+</div>

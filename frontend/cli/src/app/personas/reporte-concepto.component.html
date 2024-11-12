@@ -1,0 +1,42 @@
+<h2 class="subtitulo">Reporte de concepto&nbsp;</h2>
+<form [formGroup]="reporteForm">
+    <div class="row">
+        <div class="col-md-2">
+            <label for="mes">Mes y año: &nbsp;</label>
+            <input type="date" id="mes" class="form-control" [(ngModel)]="fechaString" formControlName="fechaControl"
+                required>
+        </div>
+    </div>&nbsp;
+    <div class="row">
+        <div class="col-md-1">
+            <button class="form-control btn-success" (click)="getReporteConcepto()">Aceptar</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive" *ngIf="reportes">
+    <br>
+
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Docente</th>
+                <th>Cantidad de Licencias</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="reportes.length == 0">
+                <td colspan="3">No hay personas con licencias que afecten al concepto registradas.</td>
+            </tr>
+            <tr *ngFor="let reporte of reportes; index as i">
+                <td>{{ i + 1 }}</td>
+                <td>{{ reporte.persona.nombre }} {{ reporte.persona.apellido }} ({{ reporte.persona.cuil }})</td>
+                <td>{{ reporte.cantLicencias }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<br>
+<button (click)="goBack()" class="btn btn-danger">Atrás</button>

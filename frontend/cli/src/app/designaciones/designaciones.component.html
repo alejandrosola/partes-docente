@@ -1,0 +1,74 @@
+<div class="table-responsive">
+    <h2>Designaciones&nbsp;<a routerLink="/designaciones/id/new" class="btn btn-success float-right">Nueva Designación</a></h2>
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Situación</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin</th>
+                <th>Cargo</th>
+                <th>Persona</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="designaciones.length == 0">
+                <td colspan="6">No hay designaciones registradas.</td>
+            </tr>
+            <tr *ngFor="let designacion of designaciones; index as i">
+                <td>{{ i + resultsPage.size * resultsPage.number + 1 }}</td>
+                <td>{{ designacion.situacionRevista }}</td>
+                <td>{{ designacion.fechaInicio }}</td>
+                <td>{{ designacion.fechaFin }}</td>
+                <td>
+                    <div *ngIf="designacion.cargo.tipoDesignacion == 'ESPACIOCURRICULAR'">{{designacion.cargo.nombre}} {{ designacion.cargo.division.anio }}° {{designacion.cargo.division.numero}}°</div>
+                    <div *ngIf="designacion.cargo.tipoDesignacion == 'CARGO'">{{designacion.cargo.nombre}}</div>
+                </td>
+                <td>{{designacion.persona.nombre}} {{designacion.persona.apellido}} ({{ designacion.persona.cuil }})</td>
+                <td>
+                    <button (click)="openDialog(designacion)" class="btn btn-danger" placement="top" ngbTooltip="Eliminar">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <ng-container *ngIf="pages.length > 1" >
+            <tfoot>
+                <tr align="center">
+                    <td colspan="8">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-2)">&laquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-1)">&lsaquo;</a>
+                                </li>
+                                <li *ngFor="let t of pages;" class="page-item">
+                                    <a class="page-link" (click)="showPage(t)"
+                                        [ngClass]="{'active': t === currentPage}"> {{t+1}} </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-3)">&rsaquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" (click)="showPage(-4)">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+            </tfoot>
+        </ng-container>
+        <div id="cantByPageForm">
+            <label for="resPage">Resultados por página: &nbsp;</label>
+            <form [formGroup]="cantByPageForm">
+                <input [(ngModel)]="cantByPage" type="number" id="resPage" value="5" class="form-control" min="1"
+                    max="20" [ngClass]="{'is-invalid': cantByPageForm['controls']['cantByPageControl']['errors']}"
+                    formControlName="cantByPageControl" style="width: 40%; margin: auto;">
+                <button (click)="getDesignaciones()" class="btn" style="width: 40%">Aceptar</button>
+            </form>
+        </div>
+ 
+    </table>
+</div>
